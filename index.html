@@ -1,1003 +1,417 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JuanDiPrron // JDP2102 Projects</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JDP2102 — Pedidos Java y Bedrock</title>
   <style>
-    /* =========================================
-       BASE ARTESANAL — JDP2102 Projects
-       ========================================= */
     :root {
-      --bg-black: #040606;
-      --bg-panel: #080b0b;
-      --bg-field: #050808;
-
-      --aqua: #1ce8c2;
-      --aqua-light: #68ffdf;
-      --aqua-border: rgba(28, 232, 194, 0.35);
-      --aqua-glow: rgba(28, 232, 194, 0.18);
-
-      --text-white: #e4efed;
-      --text-gray: #849c98;
-
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --negro: #040606;
+      --panel: #080c0c;
+      --agua: #18e0be;
+      --agua-claro: #7dfce6;
+      --agua-oscuro: #0e6b5b;
+      --texto: #dff5f0;
+      --apagado: #769690;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      background-color: var(--bg-black);
-      color: var(--text-white);
-      font-family: var(--sans);
-      line-height: 1.55;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background-color: var(--bg-black);
-      min-height: 100vh;
+      background: var(--negro);
+      color: var(--texto);
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 15px;
+      line-height: 1.55;
+      padding: 28px 18px 60px;
     }
 
-    .wrap {
-      width: 100%;
-      max-width: 980px;
+    .hoja {
+      max-width: 820px;
       margin: 0 auto;
-      padding: 0 20px;
     }
 
-    /* =========================================
-       BARRA SUPERIOR TIPO VENTANA DEV
-       ========================================= */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      background-color: var(--bg-black);
-      border-bottom: 1px solid var(--aqua);
-      box-shadow: 0 2px 14px var(--aqua-glow);
+    /* Encabezado asimétrico, sin barra superior pegajosa genérica */
+    .cabecera {
+      border-left: 3px solid var(--agua);
+      padding-left: 16px;
+      margin-bottom: 34px;
+      box-shadow: -6px 0 18px -6px var(--agua);
     }
 
-    .topbar-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 60px;
+    .cabecera .alias {
+      color: var(--agua);
+      font-size: 13px;
+      letter-spacing: 1px;
     }
 
-    .logo {
-      font-family: var(--mono);
-      font-size: 1.05rem;
+    .cabecera h1 {
+      color: var(--agua-claro);
+      font-size: 26px;
       font-weight: 700;
-      color: var(--aqua);
-      text-decoration: none;
-      letter-spacing: -0.02em;
+      margin: 4px 0 8px;
     }
 
-    .logo span {
-      color: var(--text-gray);
-      font-weight: 400;
+    .cabecera p {
+      color: var(--apagado);
+      max-width: 600px;
     }
 
-    .menu {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      font-family: var(--mono);
-      font-size: 0.85rem;
-    }
-
-    .menu a {
-      color: var(--text-gray);
-      text-decoration: none;
-    }
-
-    .menu a:hover {
-      color: var(--aqua-light);
-    }
-
-    .menu .menu-cta {
-      color: var(--aqua);
-      border: 1px solid var(--aqua);
-      padding: 6px 12px;
-      box-shadow: 0 0 8px var(--aqua-glow);
-    }
-
-    .menu .menu-cta:hover {
-      background-color: var(--aqua);
-      color: var(--bg-black);
-    }
-
-    /* =========================================
-       HERO ASIMÉTRICO + STACK DE HERRAMIENTAS
-       ========================================= */
-    .hero {
-      padding: 64px 0 56px;
-      border-bottom: 1px dashed var(--aqua-border);
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.45fr 1fr;
-      gap: 32px;
-      align-items: start;
-    }
-
-    .status-line {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: var(--mono);
-      font-size: 0.82rem;
-      color: var(--aqua);
-      border: 1px solid var(--aqua-border);
-      background-color: var(--bg-panel);
-      padding: 4px 10px;
-      margin-bottom: 18px;
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      background-color: var(--aqua);
-      box-shadow: 0 0 8px var(--aqua);
-    }
-
-    .hero h1 {
-      font-size: clamp(1.85rem, 3.8vw, 2.55rem);
-      line-height: 1.18;
-      color: var(--aqua-light);
-      margin-bottom: 16px;
-      font-weight: 700;
-    }
-
-    .hero-desc {
-      color: var(--text-gray);
-      font-size: 1rem;
-      margin-bottom: 26px;
-      max-width: 540px;
-    }
-
-    .hero-btns {
+    .enlaces-rapidos {
+      margin-top: 14px;
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 16px;
+      font-size: 14px;
     }
 
-    .btn-neon {
-      display: inline-block;
-      background-color: var(--aqua);
-      color: var(--bg-black);
-      font-family: var(--mono);
-      font-size: 0.9rem;
-      font-weight: 700;
-      padding: 11px 20px;
-      border: 1px solid var(--aqua);
+    .enlaces-rapidos a {
+      color: var(--agua);
       text-decoration: none;
-      cursor: pointer;
-      box-shadow: 0 0 12px rgba(28, 232, 194, 0.35);
-      transition: transform 0.1s ease, background-color 0.15s ease;
+      border-bottom: 1px dashed var(--agua-oscuro);
     }
 
-    .btn-neon:hover {
-      background-color: var(--aqua-light);
+    .enlaces-rapidos a:hover {
+      color: var(--agua-claro);
+      border-bottom-style: solid;
     }
 
-    .btn-neon:active {
-      transform: translate(1px, 1px);
+    h2 {
+      color: var(--agua);
+      font-size: 18px;
+      margin: 34px 0 12px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--agua-oscuro);
     }
 
-    .btn-outline {
-      display: inline-block;
-      background-color: transparent;
-      color: var(--aqua);
-      font-family: var(--mono);
-      font-size: 0.9rem;
-      padding: 11px 18px;
-      border: 1px solid var(--aqua-border);
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .btn-outline:hover {
-      border-color: var(--aqua);
-      box-shadow: 0 0 10px var(--aqua-glow);
-    }
-
-    /* Caja lateral de herramientas reales */
-    .tools-card {
-      background-color: var(--bg-panel);
-      border: 1px solid var(--aqua);
-      padding: 20px;
-      box-shadow: 0 0 16px var(--aqua-glow);
-    }
-
-    .tools-card-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-family: var(--mono);
-      font-size: 0.82rem;
-      color: var(--aqua);
-      border-bottom: 1px solid var(--aqua-border);
-      padding-bottom: 10px;
-      margin-bottom: 14px;
-    }
-
-    .tools-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      font-family: var(--mono);
-      font-size: 0.86rem;
-    }
-
-    .tools-list li {
-      display: flex;
-      justify-content: space-between;
-      color: var(--text-white);
-    }
-
-    .tools-list li span:last-child {
-      color: var(--text-gray);
-    }
-
-    /* =========================================
-       SECCIONES Y EXPERIENCIA REAL
-       ========================================= */
-    .block {
-      padding: 60px 0;
-    }
-
-    .block-border {
-      border-bottom: 1px dashed var(--aqua-border);
-    }
-
-    .block-title {
-      margin-bottom: 28px;
-    }
-
-    .block-title h2 {
-      font-family: var(--mono);
-      font-size: 1.45rem;
-      color: var(--aqua);
-      margin-bottom: 6px;
-    }
-
-    .block-title p {
-      color: var(--text-gray);
-      font-size: 0.95rem;
-    }
-
-    .editions {
+    /* Dos columnas desiguales para Java y Bedrock */
+    .ediciones {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1.15fr 0.85fr;
       gap: 24px;
+      margin-top: 14px;
     }
 
-    .ed-card {
-      background-color: var(--bg-panel);
-      border: 1px solid var(--aqua);
-      padding: 24px;
-      box-shadow: 0 0 14px var(--aqua-glow);
+    .bloque-edicion {
+      background: var(--panel);
+      border-top: 2px solid var(--agua);
+      padding: 14px 16px;
+      box-shadow: 0 -4px 14px -6px rgba(24, 224, 190, 0.45);
     }
 
-    .ed-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 14px;
-      margin-bottom: 16px;
-      border-bottom: 1px solid var(--aqua-border);
+    .bloque-edicion h3 {
+      color: var(--agua-claro);
+      font-size: 16px;
+      margin-bottom: 10px;
     }
 
-    .ed-top h3 {
-      font-family: var(--mono);
-      font-size: 1.18rem;
-      color: var(--aqua-light);
-    }
-
-    .ed-tag {
-      font-family: var(--mono);
-      font-size: 0.76rem;
-      color: var(--aqua);
-      border: 1px solid var(--aqua-border);
-      padding: 2px 8px;
-    }
-
-    .exp-items {
+    .bloque-edicion ul {
       list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
     }
 
-    .exp-items li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding-bottom: 10px;
-      border-bottom: 1px dashed #142220;
+    .bloque-edicion li {
+      padding: 6px 0;
+      border-bottom: 1px dotted #152b27;
+      color: var(--texto);
     }
 
-    .exp-items li:last-child {
+    .bloque-edicion li:last-child {
       border-bottom: none;
-      padding-bottom: 0;
     }
 
-    .exp-items .name {
-      font-size: 0.94rem;
-      color: var(--text-white);
+    .exp {
+      color: var(--agua);
+      font-size: 13px;
     }
 
-    .exp-items .time {
-      font-family: var(--mono);
-      font-size: 0.82rem;
-      color: var(--aqua);
-      border: 1px solid var(--aqua-border);
-      padding: 2px 8px;
-      white-space: nowrap;
+    .nota-corta {
+      margin-top: 14px;
+      color: var(--apagado);
+      font-size: 13.5px;
     }
 
-    /* =========================================
-       PROCESO DIRECTO (SIN RELLENO)
-       ========================================= */
-    .process-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    .process-box {
-      background-color: var(--bg-panel);
-      border: 1px solid var(--aqua-border);
+    /* Formulario con marco neón marcado */
+    .zona-pedido {
+      margin-top: 38px;
+      background: var(--panel);
+      border: 1px solid var(--agua);
       padding: 20px;
+      box-shadow: 0 0 16px rgba(24, 224, 190, 0.22), inset 0 0 12px rgba(24, 224, 190, 0.06);
     }
 
-    .process-box:hover {
-      border-color: var(--aqua);
-      box-shadow: 0 0 12px var(--aqua-glow);
+    .zona-pedido h2 {
+      margin-top: 0;
     }
 
-    .p-num {
-      font-family: var(--mono);
-      font-size: 0.85rem;
-      color: var(--aqua);
-      margin-bottom: 10px;
-      display: block;
-    }
-
-    .process-box h3 {
-      font-size: 1.04rem;
-      color: var(--aqua-light);
-      margin-bottom: 8px;
-    }
-
-    .process-box p {
-      font-size: 0.9rem;
-      color: var(--text-gray);
-    }
-
-    /* =========================================
-       FORMULARIO DE PEDIDOS
-       ========================================= */
-    .order-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.6fr;
-      gap: 34px;
-      align-items: start;
-    }
-
-    .order-side h2 {
-      font-family: var(--mono);
-      font-size: 1.5rem;
-      color: var(--aqua);
-      margin-bottom: 12px;
-    }
-
-    .order-side > p {
-      color: var(--text-gray);
-      font-size: 0.94rem;
-      margin-bottom: 20px;
-    }
-
-    .direct-card {
-      background-color: var(--bg-panel);
-      border: 1px solid var(--aqua);
-      padding: 16px;
-      box-shadow: 0 0 12px var(--aqua-glow);
-      font-family: var(--mono);
-      font-size: 0.85rem;
-    }
-
-    .direct-card div {
-      margin-bottom: 8px;
-      color: var(--text-gray);
-    }
-
-    .direct-card div:last-child {
-      margin-bottom: 0;
-    }
-
-    .direct-card strong {
-      color: var(--aqua-light);
-      display: block;
-      margin-bottom: 10px;
-    }
-
-    .direct-card span {
-      color: var(--aqua);
-    }
-
-    .order-form {
-      background-color: var(--bg-panel);
-      border: 1px solid var(--aqua);
-      padding: 24px;
-      box-shadow: 0 0 16px var(--aqua-glow);
-    }
-
-    .row-2 {
+    .fila {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
 
-    .input-group {
-      margin-bottom: 16px;
-    }
-
-    .input-group label {
-      display: block;
-      font-family: var(--mono);
-      font-size: 0.82rem;
-      color: var(--aqua);
-      margin-bottom: 6px;
-    }
-
-    .input-group input,
-    .input-group select,
-    .input-group textarea {
-      width: 100%;
-      background-color: var(--bg-field);
-      border: 1px solid var(--aqua-border);
-      padding: 10px 12px;
-      color: var(--text-white);
-      font-family: var(--sans);
-      font-size: 0.93rem;
-      outline: none;
-    }
-
-    .input-group input::placeholder,
-    .input-group textarea::placeholder {
-      color: #465c58;
-    }
-
-    .input-group input:focus,
-    .input-group select:focus,
-    .input-group textarea:focus {
-      border-color: var(--aqua);
-      box-shadow: 0 0 10px rgba(28, 232, 194, 0.22);
-    }
-
-    .input-group select option {
-      background-color: var(--bg-panel);
-      color: var(--text-white);
-    }
-
-    .btn-full {
-      width: 100%;
-      padding: 12px;
-      background-color: transparent;
-      color: var(--aqua);
-      border: 1px solid var(--aqua);
-      font-family: var(--mono);
-      font-size: 0.94rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 0 10px var(--aqua-glow);
-    }
-
-    .btn-full:hover {
-      background-color: var(--aqua);
-      color: var(--bg-black);
-    }
-
-    /* =========================================
-       TICKET GENERADO
-       ========================================= */
-    .ticket-box {
-      margin-top: 22px;
-      padding: 18px;
-      background-color: var(--bg-black);
-      border: 1px solid var(--aqua);
-      box-shadow: 0 0 14px var(--aqua-glow);
-    }
-
-    .ticket-box h3 {
-      font-family: var(--mono);
-      font-size: 0.95rem;
-      color: var(--aqua-light);
-      margin-bottom: 8px;
-    }
-
-    .ticket-box pre {
-      font-family: var(--mono);
-      font-size: 0.83rem;
-      color: var(--text-white);
-      white-space: pre-wrap;
-      background-color: var(--bg-panel);
-      padding: 12px;
-      border: 1px dashed var(--aqua-border);
+    .campo {
       margin-bottom: 14px;
     }
 
-    .ticket-btns {
+    label {
+      display: block;
+      color: var(--agua);
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      background: #030505;
+      color: var(--agua-claro);
+      border: 1px solid var(--agua-oscuro);
+      padding: 9px 10px;
+      font-family: inherit;
+      font-size: 14px;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--agua);
+      box-shadow: 0 0 8px rgba(24, 224, 190, 0.35);
+    }
+
+    button {
+      background: #051411;
+      color: var(--agua-claro);
+      border: 1px solid var(--agua);
+      padding: 10px 16px;
+      font-family: inherit;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(24, 224, 190, 0.25);
+    }
+
+    button:hover {
+      background: var(--agua);
+      color: #030605;
+      font-weight: 700;
+    }
+
+    .acciones-envio {
+      display: none;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--agua);
+    }
+
+    .acciones-envio pre {
+      background: #030505;
+      border: 1px solid var(--agua-oscuro);
+      padding: 12px;
+      color: var(--texto);
+      white-space: pre-wrap;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .botones-fila {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 10px;
     }
 
-    .ticket-msg {
-      font-family: var(--mono);
-      font-size: 0.82rem;
-      color: var(--aqua-light);
-      min-height: 1.2em;
+    .btn-link {
+      display: inline-block;
+      padding: 9px 14px;
+      border: 1px solid var(--agua);
+      color: var(--agua);
+      text-decoration: none;
+      font-size: 13.5px;
     }
 
-    /* =========================================
-       FOOTER
-       ========================================= */
-    .footer {
-      border-top: 1px solid var(--aqua-border);
-      padding: 24px 0;
-      font-family: var(--mono);
-      font-size: 0.82rem;
-      color: var(--text-gray);
+    .btn-link:hover {
+      background: rgba(24, 224, 190, 0.14);
+      color: var(--agua-claro);
     }
 
-    .footer-inner {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
+    #aviso {
+      margin-top: 10px;
+      color: var(--agua-claro);
+      font-size: 13px;
+      min-height: 18px;
     }
 
-    /* =========================================
-       RESPONSIVE
-       ========================================= */
-    @media (max-width: 820px) {
-      .hero-grid,
-      .editions,
-      .process-row,
-      .order-grid {
-        grid-template-columns: 1fr;
-      }
+    footer {
+      margin-top: 36px;
+      color: var(--apagado);
+      font-size: 13px;
+      border-top: 1px solid #10211e;
+      padding-top: 14px;
     }
 
-    @media (max-width: 540px) {
-      .row-2 {
-        grid-template-columns: 1fr;
-      }
-
-      .menu a:not(.menu-cta) {
-        display: none;
-      }
+    @media (max-width: 660px) {
+      .ediciones, .fila { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+  <div class="hoja">
+    <header class="cabecera">
+      <div class="alias">JUAN DIPRRON // JDP2102</div>
+      <h1>Pedidos para Minecraft Java y Bedrock</h1>
+      <p>
+        Armo mapas, eventos, packs y modelos 3D según lo que necesites.
+        Te digo de frente qué se puede hacer, cuánto tarda y cuánto sale.
+      </p>
+      <div class="enlaces-rapidos">
+        <a href="#pedir">Ir al formulario</a>
+        <span>Discord: <strong style="color:var(--agua-claro)">juandiprron</strong></span>
+        <span>Correo: <strong style="color:var(--agua-claro)">juandiprronm@gmail.com</strong></span>
+      </div>
+    </header>
 
-  <!-- Barra superior -->
-  <header class="topbar">
-    <div class="wrap topbar-inner">
-      <a href="#" class="logo">JuanDiPrron<span> // JDP2102</span></a>
-      <nav class="menu">
-        <a href="#servicios">Experiencia</a>
-        <a href="#como-funciona">Cómo trabajo</a>
-        <a href="#pedir" class="menu-cta">Pedir proyecto</a>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <!-- Presentación + herramientas -->
-    <section class="hero">
-      <div class="wrap hero-grid">
-        <div>
-          <div class="status-line">
-            <span class="dot"></span>
-            <span>Disponible para pedidos</span>
-          </div>
-          <h1>Mapas, eventos, packs y mods a medida para Minecraft.</h1>
-          <p class="hero-desc">
-            Soy <strong>JuanDiPrron</strong> (JDP2102 Projects). Llevo más de 3 años armando 
-            construcciones y eventos en <strong>Java</strong> y <strong>Bedrock</strong>, además de 
-            datapacks, resource packs, modelos 3D y mods en Java.
-          </p>
-          <div class="hero-btns">
-            <a href="#pedir" class="btn-neon">Hacer un pedido</a>
-            <a href="#servicios" class="btn-outline">Ver lo que hago</a>
-          </div>
-        </div>
-
-        <aside class="tools-card">
-          <div class="tools-card-head">
-            <span>HERRAMIENTAS // STACK</span>
-            <span>JAVA + BEDROCK</span>
-          </div>
-          <ul class="tools-list">
-            <li>
-              <span>WorldEdit / Axiom</span>
-              <span>Construcción</span>
-            </li>
-            <li>
-              <span>Blockbench</span>
-              <span>Modelos 3D</span>
-            </li>
-            <li>
-              <span>JSON / Mcfunction</span>
-              <span>Data & Behavior Packs</span>
-            </li>
-            <li>
-              <span>MCreator / KubeJS</span>
-              <span>Mods Java</span>
-            </li>
-            <li>
-              <span>Comandos & Lógica</span>
-              <span>Eventos MC</span>
-            </li>
+    <section>
+      <h2>Qué hago y cuánto llevo en cada cosa</h2>
+      <div class="ediciones">
+        <div class="bloque-edicion">
+          <h3>Java Edition</h3>
+          <ul>
+            <li>Creación de eventos <span class="exp">— +3 años</span></li>
+            <li>Construcciones <span class="exp">— 3 años</span></li>
+            <li>Resource Packs / Data Packs <span class="exp">— 1 año</span></li>
+            <li>Modelos 3D (Blockbench) <span class="exp">— 3 meses</span></li>
+            <li>Mods <span class="exp">— 1 mes</span></li>
           </ul>
-        </aside>
-      </div>
-    </section>
-
-    <!-- Experiencia real por edición -->
-    <section id="servicios" class="block block-border">
-      <div class="wrap">
-        <div class="block-title">
-          <h2>// Experiencia por edición</h2>
-          <p>El tiempo real que llevo trabajando cada área en Java y Bedrock.</p>
         </div>
 
-        <div class="editions">
-          <!-- Java -->
-          <div class="ed-card">
-            <div class="ed-top">
-              <h3>Java Edition</h3>
-              <span class="ed-tag">PC / Servers</span>
-            </div>
-            <ul class="exp-items">
-              <li>
-                <span class="name">Creación de eventos</span>
-                <span class="time">+3 años</span>
-              </li>
-              <li>
-                <span class="name">Construcciones</span>
-                <span class="time">3 años</span>
-              </li>
-              <li>
-                <span class="name">Resource Packs / Data Packs</span>
-                <span class="time">1 año</span>
-              </li>
-              <li>
-                <span class="name">Modelos 3D (Blockbench)</span>
-                <span class="time">3 meses</span>
-              </li>
-              <li>
-                <span class="name">Mods</span>
-                <span class="time">1 mes</span>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Bedrock -->
-          <div class="ed-card">
-            <div class="ed-top">
-              <h3>Bedrock Edition</h3>
-              <span class="ed-tag">Crossplay</span>
-            </div>
-            <ul class="exp-items">
-              <li>
-                <span class="name">Creación de eventos</span>
-                <span class="time">+3 años</span>
-              </li>
-              <li>
-                <span class="name">Construcciones</span>
-                <span class="time">3 años</span>
-              </li>
-              <li>
-                <span class="name">Resource Packs / Data Packs</span>
-                <span class="time">1 año</span>
-              </li>
-              <li>
-                <span class="name">Modelos 3D (Blockbench)</span>
-                <span class="time">3 meses</span>
-              </li>
-            </ul>
-          </div>
+        <div class="bloque-edicion">
+          <h3>Bedrock Edition</h3>
+          <ul>
+            <li>Creación de eventos <span class="exp">— +3 años</span></li>
+            <li>Construcciones <span class="exp">— 3 años</span></li>
+            <li>Resource Packs / Data Packs <span class="exp">— 1 año</span></li>
+            <li>Modelos 3D (Blockbench) <span class="exp">— 3 meses</span></li>
+          </ul>
         </div>
       </div>
+      <p class="nota-corta">
+        * En mods voy empezando (1 mes de experiencia), así que pido cosas realistas y acordes a ese nivel. En construcciones y eventos llevo más tiempo.
+      </p>
     </section>
 
-    <!-- Proceso de trabajo -->
-    <section id="como-funciona" class="block block-border">
-      <div class="wrap">
-        <div class="block-title">
-          <h2>// Cómo manejamos el pedido</h2>
-        </div>
-
-        <div class="process-row">
-          <div class="process-box">
-            <span class="p-num">[01]</span>
-            <h3>Me pasas la idea</h3>
-            <p>Llenas los datos abajo con la edición, versión y qué quieres que pase en el mapa, evento o pack.</p>
+    <section id="pedir" class="zona-pedido">
+      <h2>Mandar pedido</h2>
+      <form id="formPedido">
+        <div class="fila">
+          <div class="campo">
+            <label for="nombre">Tu nick o nombre</label>
+            <input id="nombre" required placeholder="Ej. MateoMC" />
           </div>
-
-          <div class="process-box">
-            <span class="p-num">[02]</span>
-            <h3>Cuadramos precio y fecha</h3>
-            <p>Te respondo por Discord o correo con cuánto sale según el tamaño del trabajo y para qué día queda.</p>
-          </div>
-
-          <div class="process-box">
-            <span class="p-num">[03]</span>
-            <h3>Avances reales</h3>
-            <p>Te voy mandando capturas o pruebas mientras lo armo para corregir cualquier detalle antes de entregarte los archivos.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Formulario de pedidos -->
-    <section id="pedir" class="block">
-      <div class="wrap order-grid">
-        <div class="order-side">
-          <h2>// Pedir proyecto</h2>
-          <p>
-            Rellena lo básico y te genera la ficha lista para mandármela por Discord o correo sin tener que explicar todo desde cero.
-          </p>
-          <div class="direct-card">
-            <strong>Contacto directo</strong>
-            <div>Discord: <span>juandiprron</span></div>
-            <div>Correo: <span>juandiprronm@gmail.com</span></div>
-            <div>Hora local: <span>Colombia (COT)</span></div>
+          <div class="campo">
+            <label for="contacto">Tu Discord</label>
+            <input id="contacto" required placeholder="Ej. mateo_dev" />
           </div>
         </div>
 
-        <form id="project-form" class="order-form">
-          <div class="row-2">
-            <div class="input-group">
-              <label for="client-name">Tu nick o nombre</label>
-              <input type="text" id="client-name" placeholder="Ej. SteveMC" required>
-            </div>
-
-            <div class="input-group">
-              <label for="client-discord">Tu usuario de Discord</label>
-              <input type="text" id="client-discord" placeholder="Ej. usuario123" required>
-            </div>
-          </div>
-
-          <div class="row-2">
-            <div class="input-group">
-              <label for="edition">Edición</label>
-              <select id="edition" required>
-                <option value="" disabled selected>Elige edición...</option>
-                <option value="Java Edition">Java Edition</option>
-                <option value="Bedrock Edition">Bedrock Edition</option>
-                <option value="Java y Bedrock">Ambas (Java y Bedrock)</option>
-              </select>
-            </div>
-
-            <div class="input-group">
-              <label for="mc-version">Versión de Minecraft</label>
-              <input type="text" id="mc-version" placeholder="Ej. 1.20.1 / 1.21.4 / Bedrock" required>
-            </div>
-          </div>
-
-          <div class="input-group">
-            <label for="project-type">Qué necesitas</label>
-            <select id="project-type" required>
-              <option value="" disabled selected>Selecciona una opción...</option>
-              <option value="Creación de evento">Creación de evento</option>
-              <option value="Construcción (Mapa / Lobby / Estructura)">Construcción (Mapa / Lobby / Estructura)</option>
-              <option value="Resource Pack / Data Pack">Resource Pack / Data Pack</option>
-              <option value="Modelos 3D (Blockbench)">Modelos 3D (Blockbench)</option>
-              <option value="Mod (Solo Java)">Mod (Solo Java)</option>
-              <option value="Varios combinados">Varios combinados</option>
+        <div class="fila">
+          <div class="campo">
+            <label for="edicion">Edición</label>
+            <select id="edicion" required>
+              <option value="">Elige...</option>
+              <option value="Java Edition">Java Edition</option>
+              <option value="Bedrock Edition">Bedrock Edition</option>
+              <option value="Ambas">Ambas</option>
             </select>
           </div>
-
-          <div class="input-group">
-            <label for="description">Qué quieres que haga o cómo es</label>
-            <textarea id="description" rows="5" placeholder="Describe la temática, medidas aproximadas, mecánicas del evento o qué ítems/modelos necesitas..." required></textarea>
+          <div class="campo">
+            <label for="version">Versión</label>
+            <input id="version" required placeholder="Ej. 1.20.1, 1.21.4, Bedrock actual" />
           </div>
+        </div>
 
-          <div class="row-2">
-            <div class="input-group">
-              <label for="budget">Presupuesto aproximado (USD)</label>
-              <input type="text" id="budget" placeholder="Ej. $15 - $35 USD / A convenir">
-            </div>
-
-            <div class="input-group">
-              <label for="deadline">Para cuándo lo necesitas</label>
-              <input type="text" id="deadline" placeholder="Ej. En 1 semana / Sin afán">
-            </div>
+        <div class="fila">
+          <div class="campo">
+            <label for="tipo">Qué necesitas</label>
+            <select id="tipo" required>
+              <option value="">Elige...</option>
+              <option value="Construcciones">Construcciones</option>
+              <option value="Modelos 3D (Blockbench)">Modelos 3D (Blockbench)</option>
+              <option value="Mods">Mods (Java)</option>
+              <option value="Resource Packs / Data Packs">Resource Packs / Data Packs</option>
+              <option value="Creación de eventos">Creación de eventos</option>
+            </select>
           </div>
+          <div class="campo">
+            <label for="presupuesto">Presupuesto aprox.</label>
+            <input id="presupuesto" placeholder="Ej. 15 USD o a hablar" />
+          </div>
+        </div>
 
-          <button type="submit" class="btn-full">Armar ficha del pedido</button>
-        </form>
+        <div class="campo">
+          <label for="detalles">Explícame la idea</label>
+          <textarea id="detalles" rows="4" required placeholder="Qué quieres hacer, para cuándo lo necesitas y cualquier detalle importante..."></textarea>
+        </div>
+
+        <button type="submit">Armar mensaje de pedido</button>
+      </form>
+
+      <div id="acciones" class="acciones-envio">
+        <pre id="resumen"></pre>
+        <div class="botones-fila">
+          <button type="button" id="btnCopiar">Copiar para Discord (juandiprron)</button>
+          <a id="btnCorreo" class="btn-link" target="_blank" rel="noopener">Abrir correo (juandiprronm@gmail.com)</a>
+        </div>
+        <div id="aviso"></div>
       </div>
     </section>
-  </main>
 
-  <footer class="footer">
-    <div class="wrap footer-inner">
-      <span>JuanDiPrron // JDP2102 Projects</span>
-      <span>Minecraft Java & Bedrock</span>
-    </div>
-  </footer>
+    <footer>
+      JuanDiPrron / JDP2102 — Discord: juandiprron — Correo: juandiprronm@gmail.com
+    </footer>
+  </div>
 
   <script>
-    const CONFIG = {
-      discordUser: "juandiprron",
-      email: "juandiprronm@gmail.com",
-      discordWebhookUrl: ""
-    };
+    const form = document.getElementById("formPedido");
+    const acciones = document.getElementById("acciones");
+    const resumenEl = document.getElementById("resumen");
+    const btnCopiar = document.getElementById("btnCopiar");
+    const btnCorreo = document.getElementById("btnCorreo");
+    const aviso = document.getElementById("aviso");
+    const edicionSel = document.getElementById("edicion");
+    const tipoSel = document.getElementById("tipo");
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("project-form");
-      const editionSelect = document.getElementById("edition");
-      const typeSelect = document.getElementById("project-type");
-
-      // Bloquea la opción de Mod si elige Bedrock
-      editionSelect.addEventListener("change", () => {
-        const modOpt = Array.from(typeSelect.options).find(o => o.value.includes("Mod (Solo Java)"));
-        if (!modOpt) return;
-
-        if (editionSelect.value === "Bedrock Edition") {
-          modOpt.disabled = true;
-          if (typeSelect.value === modOpt.value) typeSelect.value = "";
-        } else {
-          modOpt.disabled = false;
-        }
-      });
-
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const data = {
-          id: "JDP-" + Math.floor(1000 + Math.random() * 9000),
-          name: document.getElementById("client-name").value.trim(),
-          discord: document.getElementById("client-discord").value.trim(),
-          edition: editionSelect.value,
-          version: document.getElementById("mc-version").value.trim(),
-          type: typeSelect.value,
-          description: document.getElementById("description").value.trim(),
-          budget: document.getElementById("budget").value.trim() || "A convenir",
-          deadline: document.getElementById("deadline").value.trim() || "Sin fecha fija"
-        };
-
-        const summary = [
-          `PEDIDO [${data.id}] — JDP2102 Projects`,
-          `------------------------------------`,
-          `Nick: ${data.name}`,
-          `Discord: ${data.discord}`,
-          `Edición: ${data.edition} (${data.version})`,
-          `Trabajo: ${data.type}`,
-          `Presupuesto: ${data.budget}`,
-          `Fecha límite: ${data.deadline}`,
-          `------------------------------------`,
-          `Detalles:`,
-          data.description
-        ].join("\n");
-
-        let webhookOk = false;
-        if (CONFIG.discordWebhookUrl) {
-          webhookOk = await postWebhook(data);
-        }
-
-        showTicket(form, data, summary, webhookOk);
-      });
+    edicionSel.addEventListener("change", () => {
+      const optMod = [...tipoSel.options].find(o => o.value === "Mods");
+      if (optMod) {
+        optMod.disabled = edicionSel.value === "Bedrock Edition";
+        if (optMod.disabled && tipoSel.value === "Mods") tipoSel.value = "";
+      }
     });
 
-    async function postWebhook(data) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const texto = [
+        "Pedido para JuanDiPrron / JDP2102",
+        "Nick: " + document.getElementById("nombre").value.trim(),
+        "Discord: " + document.getElementById("contacto").value.trim(),
+        "Edición: " + edicionSel.value + " (" + document.getElementById("version").value.trim() + ")",
+        "Tipo: " + tipoSel.value,
+        "Presupuesto: " + (document.getElementById("presupuesto").value.trim() || "No puesto"),
+        "Detalles: " + document.getElementById("detalles").value.trim()
+      ].join("\n");
+
+      resumenEl.textContent = texto;
+      const asunto = encodeURIComponent("Pedido MC: " + tipoSel.value + " - " + document.getElementById("nombre").value.trim());
+      const cuerpo = encodeURIComponent(texto);
+      btnCorreo.href = `https://mail.google.com/mail/?view=cm&fs=1&to=juandiprronm@gmail.com&su=${asunto}&body=${cuerpo}`;
+      acciones.style.display = "block";
+      aviso.textContent = "";
+    });
+
+    btnCopiar.addEventListener("click", async () => {
       try {
-        const res = await fetch(CONFIG.discordWebhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            username: "JDP2102 Projects",
-            embeds: [{
-              title: `[${data.id}] ${data.type}`,
-              color: 1894594,
-              fields: [
-                { name: "Nick", value: data.name, inline: true },
-                { name: "Discord", value: data.discord, inline: true },
-                { name: "Edición", value: `${data.edition} (${data.version})`, inline: false },
-                { name: "Presupuesto", value: data.budget, inline: true },
-                { name: "Plazo", value: data.deadline, inline: true },
-                { name: "Descripción", value: data.description.slice(0, 1000), inline: false }
-              ]
-            }]
-          })
-        });
-        return res.ok;
+        await navigator.clipboard.writeText(resumenEl.textContent);
+        aviso.textContent = "Copiado. Pásalo por MD a juandiprron en Discord.";
       } catch {
-        return false;
+        aviso.textContent = "Selecciona el texto de arriba y cópialo a mano para juandiprron.";
       }
-    }
-
-    function fallbackCopy(text) {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.style.position = "fixed";
-      ta.style.left = "-9999px";
-      document.body.appendChild(ta);
-      ta.select();
-      const ok = document.execCommand("copy");
-      document.body.removeChild(ta);
-      return ok;
-    }
-
-    function showTicket(form, data, summary, webhookOk) {
-      const prev = document.getElementById("ticket-box");
-      if (prev) prev.remove();
-
-      const subject = encodeURIComponent(`[Pedido ${data.id}] ${data.type} - ${data.name}`);
-      const body = encodeURIComponent(summary);
-
-      const mailtoLink = `mailto:${CONFIG.email}?subject=${subject}&body=${body}`;
-      const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(CONFIG.email)}&su=${subject}&body=${body}`;
-
-      const box = document.createElement("div");
-      box.id = "ticket-box";
-      box.className = "ticket-box";
-      box.innerHTML = `
-        <h3>Ficha lista // ${data.id}</h3>
-        <p style="color: var(--text-gray); font-size: 0.88rem; margin-bottom: 10px;">
-          ${webhookOk
-            ? "Ya me llegó una copia automática. Si quieres agilizar, escríbeme directo:"
-            : "Copia la ficha para mandármela por Discord o envíala directo a mi correo:"}
-        </p>
-        <pre id="ticket-text"></pre>
-        <div class="ticket-btns">
-          <button type="button" id="copy-dc" class="btn-neon">Copiar para Discord (${CONFIG.discordUser})</button>
-          <a href="${gmailLink}" target="_blank" rel="noopener" class="btn-outline">Enviar por Gmail</a>
-          <a href="${mailtoLink}" class="btn-outline">Abrir Correo</a>
-        </div>
-        <p id="ticket-msg" class="ticket-msg"></p>
-      `;
-
-      box.querySelector("#ticket-text").textContent = summary;
-      form.appendChild(box);
-
-      const copyBtn = box.querySelector("#copy-dc");
-      const msg = box.querySelector("#ticket-msg");
-
-      copyBtn.addEventListener("click", async () => {
-        let ok = false;
-        try {
-          await navigator.clipboard.writeText(summary);
-          ok = true;
-        } catch {
-          ok = fallbackCopy(summary);
-        }
-
-        msg.textContent = ok
-          ? `Copiado. Abre Discord, busca a "${CONFIG.discordUser}" y pégalo.`
-          : `Copia el texto de arriba y mándalo a "${CONFIG.discordUser}" en Discord.`;
-      });
-
-      box.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
+    });
   </script>
 </body>
 </html>
